@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Julio Porrino</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body style="background:#f1f5f9;font-family:sans-serif">
+<header style="background:#122a4a;color:white" class="px-4 py-3 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<img src="logo.png" class="h-[90px] bg-white rounded-xl p-2">
+<div><p class="font-extrabold">JULIO PORRINO</p><p class="text-[10px] text-[#c8a97e]">MP 01-2164 • DEÁN FUNES 460 • 03548 571577</p></div>
+</div>
+<a href="https://www.calculadoracpmcp.com/calculadora.html" target="_blank" class="bg-[#c8a97e] text-[#122a4a] px-4 py-2 rounded-full text-xs font-bold">🧮 Actualización de Contratos de Alquiler</a>
+</header>
+<div class="max-w-[1200px] mx-auto p-4 grid md:grid-cols-[360px_1fr] gap-5">
+<div class="bg-white rounded-[20px] p-5 border h-fit">
+<h3 class="font-extrabold">+ Nueva Producción</h3>
+<input id="t_titulo" value="DPTO. 1 DORMITORIO" class="w-full mt-3 border rounded-xl px-3 py-2 text-sm">
+<input id="t_ubic" value="Bv. San Juan Nº 781 - Bº Alberdi" class="w-full mt-2 border rounded-xl px-3 py-2 text-sm">
+<input id="t_precio" value="$ 550.000.-" class="w-full mt-2 border rounded-xl px-3 py-2 text-sm">
+<input id="t_latlng" value="-31.4129,-64.1850" class="w-full mt-2 border rounded-xl px-3 py-2 text-xs">
+<textarea id="t_desc" rows="3" class="w-full mt-2 border rounded-xl px-3 py-2 text-xs">1 Dorm c/ Placard
+Baño Completo
+Living Comedor Amplio</textarea>
+<input id="t_fotos" value="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800,https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400,https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400" class="w-full mt-2 border rounded-xl px-3 py-2 text-[11px]">
+<button onclick="guardar()" class="w-full mt-4 bg-[#122a4a] text-white py-3 rounded-full font-bold text-sm">💾 Guardar</button>
+</div>
+<div id="lista" class="space-y-6"></div>
+</div>
+<script>
+let props=JSON.parse(localStorage.getItem('jp_final')||'[]');
+if(props.length==0){props=[{id:1,titulo:'DPTO. 1 DORMITORIO',barrio:'Bº Alberdi',ubic:'Bv. San Juan Nº 781 - Bº Alberdi',piso:'4to Piso - Contrafrente',precio:'$ 550.000.-',latlng:'-31.4129,-64.1850',desc:'1 Dormitorio c/ Placard\\nBaño Completo\\nLiving Amplio',fotos:['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800','https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400','https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400']},{id:2,titulo:'VIVIENDA 2 Dorm c/ Cochera',barrio:'Bº Balumba',ubic:'F. Alcorta - Balumba',piso:'Con Cochera',precio:'$ 550.000.-',latlng:'-30.8612,-64.5391',desc:'2 Dorm\\nBaño Completo\\nLiving Amplio',fotos:['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800']}];}
+function guardar(){const p={id:Date.now(),titulo:document.getElementById('t_titulo').value,barrio:'Bº',ubic:document.getElementById('t_ubic').value,piso:'Detalle',precio:document.getElementById('t_precio').value,latlng:document.getElementById('t_latlng').value,desc:document.getElementById('t_desc').value,fotos:document.getElementById('t_fotos').value.split(',')};props.unshift(p);localStorage.setItem('jp_final',JSON.stringify(props));render();}
+function render(){const c=document.getElementById('lista');c.innerHTML='';props.forEach(p=>{const d=document.createElement('div');d.className='bg-white rounded-[16px] overflow-hidden border';d.id='prop-'+p.id;d.innerHTML=`<div class="flex"><div class="w-[24%] bg-white p-2 flex justify-center"><img src="logo.png" class="h-14"></div><div class="w-[51%] bg-[#1e345e] text-white flex items-center justify-center font-bold text-center">${p.titulo}</div><div class="w-[25%] bg-[#1e345e] text-[#f6e58d] font-bold text-right p-2 text-xs">EN ALQUILER</div></div><div class="flex h-7"><div class="w-[24%] bg-[#00a9c9]"></div><div class="w-[76%] bg-[#1e345e] text-white text-[11px] flex items-center px-2">▶▶▶ ${p.ubic} - ${p.latlng}</div></div><img src="${p.fotos[0]}" class="w-full h-[200px] object-cover"><div class="p-3 flex gap-2"><button onclick="genPDF(${p.id})" class="flex-1 bg-[#122a4a] text-white py-3 rounded-full font-bold text-sm">📄 Generar PDF Automático</button><button onclick="props=props.filter(x=>x.id!=${p.id});localStorage.setItem('jp_final',JSON.stringify(props));render()" class="border px-4 rounded-full">Borrar</button></div>`;c.appendChild(d);});}
+async function genPDF(id){const el=document.getElementById('prop-'+id);const canvas=await html2canvas(el,{scale:2,useCORS:true});const img=canvas.toDataURL('image/png');const {jsPDF}=window.jspdf;const pdf=new jsPDF('p','mm','a4');const w=pdf.internal.pageSize.getWidth();const h=canvas.height*w/canvas.width;pdf.addImage(img,'PNG',0,0,w,h);pdf.save('Ficha.pdf');}
+render();
+</script>
+</body>
+</html>
