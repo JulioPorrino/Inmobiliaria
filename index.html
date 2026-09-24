@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Julio Porrino - Inmobiliaria - Dean Funes 460</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50">
+<header class="bg-white shadow p-4 sticky top-0">
+<div style="max-width:1000px;margin:0 auto;display:flex;justify-content:space-between">
+<div><b>JULIO PORRINO</b><br><small>Dean Funes 460 - Capilla del Monte</small></div>
+<a href="#contacto" style="background:#16a34a;color:white;padding:8px 16px;border-radius:20px;text-decoration:none">WhatsApp</a>
+</div>
+</header>
+<div style="max-width:1000px;margin:20px auto;padding:20px">
+<h1 style="font-size:32px;font-weight:900">Tu proxima propiedad en Capilla del Monte</h1>
+<p>Venta, alquiler y administraciones.</p>
+<div style="background:white;padding:16px;border-radius:16px;margin-top:20px;text-align:center">
+<h3>Contacto WhatsApp</h3>
+<img src="contacto.jpg" style="width:250px;margin:10px auto;display:block;border-radius:12px">
+<a href="https://wa.me/" style="background:#22c55e;color:white;padding:12px 24px;border-radius:30px;display:inline-block;margin-top:10px;text-decoration:none;font-weight:bold">Escribime por WhatsApp</a>
+</div>
+<div style="background:white;padding:20px;border-radius:16px;margin-top:30px">
+<h3>Calculadora Alquiler ICL / IPC</h3>
+Monto: <input id="monto" type="number" value="150000" style="border:1px solid #ccc;padding:6px"><br><br>
+ICL Inicial: <input id="iclIni" type="number" value="1.5" step="0.01" style="border:1px solid #ccc;padding:6px"><br><br>
+ICL Actual: <input id="iclAct" type="number" value="2.1" step="0.01" style="border:1px solid #ccc;padding:6px"><br><br>
+<button onclick="calc()" style="background:black;color:white;padding:10px 20px;border-radius:8px">Calcular</button>
+<div id="res" style="margin-top:15px;font-size:22px;font-weight:bold;color:green"></div>
+</div>
+</div>
+<div id="contacto" style="background:#0f172a;color:white;padding:40px;text-align:center">
+<h2>Julio Porrino - Inmobiliaria - Dean Funes 460</h2>
+<img src="contacto.jpg" style="width:180px;background:white;padding:8px;border-radius:12px;margin:15px auto;display:block">
+</div>
+<script>
+function calc(){
+ const m=parseFloat(document.getElementById('monto').value);
+ const ini=parseFloat(document.getElementById('iclIni').value);
+ const act=parseFloat(document.getElementById('iclAct').value);
+ document.getElementById('res').innerHTML='Nuevo: $ '+ (m*(act/ini)).toLocaleString('es-AR');
+}
+</script>
+</body>
+</html>
